@@ -127,6 +127,8 @@ const activityLog = document.querySelector("#activityLog");
 const transferDialog = document.querySelector("#transferDialog");
 const openTransferDialog = document.querySelector("#openTransferDialog");
 const transferForm = document.querySelector("#transferForm");
+const closeTransferDialog = document.querySelector("#closeTransferDialog");
+const cancelTransferDialog = document.querySelector("#cancelTransferDialog");
 const activityItemTemplate = document.querySelector("#activityItemTemplate");
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -256,8 +258,16 @@ openTransferDialog.addEventListener("click", () => {
   appendActivity("Transfer flow opened", "Outbound transfer dialog opened.");
 });
 
+function dismissTransferDialog() {
+  transferDialog.close();
+}
+
+closeTransferDialog.addEventListener("click", dismissTransferDialog);
+cancelTransferDialog.addEventListener("click", dismissTransferDialog);
+
 transferForm.addEventListener("submit", (event) => {
   event.preventDefault();
+  event.stopPropagation();
 
   const formData = new FormData(transferForm);
   const targetAccount = String(formData.get("targetAccount") || "").trim();

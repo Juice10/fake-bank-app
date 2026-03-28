@@ -65,7 +65,7 @@
                 ledger, but does not connect to any external bank.
               </p>
             </div>
-            <button class="danger-button" id="openTransferDialog">
+            <button class="danger-button" id="openTransferDialog" type="button">
               Transfer Funds
             </button>
           </div>
@@ -96,10 +96,10 @@
           </form>
 
           <div class="search-chips">
-            <button class="chip" data-query="payroll">Payroll</button>
-            <button class="chip" data-query="rent">Rent</button>
-            <button class="chip" data-query="wire">Wire</button>
-            <button class="chip" data-query="coffee">Coffee</button>
+            <button class="chip" data-query="payroll" type="button">Payroll</button>
+            <button class="chip" data-query="rent" type="button">Rent</button>
+            <button class="chip" data-query="wire" type="button">Wire</button>
+            <button class="chip" data-query="coffee" type="button">Coffee</button>
           </div>
 
           <div class="table-wrap">
@@ -132,13 +132,13 @@
     </div>
 
     <dialog class="transfer-dialog" id="transferDialog">
-      <form method="dialog" class="dialog-card" id="transferForm">
+      <form class="dialog-card" id="transferForm">
         <div class="dialog-head">
           <div>
             <p class="panel-label">Transfer Funds</p>
             <h2>Review Outbound Transfer</h2>
           </div>
-          <button class="ghost-button" value="cancel" aria-label="Close">
+          <button class="ghost-button" type="button" id="closeTransferDialog" aria-label="Close">
             Close
           </button>
         </div>
@@ -177,7 +177,7 @@
         </p>
 
         <div class="dialog-actions">
-          <button class="ghost-button" value="cancel">Cancel</button>
+          <button class="ghost-button" type="button" id="cancelTransferDialog">Cancel</button>
           <button class="danger-button" type="submit">Confirm Transfer</button>
         </div>
       </form>
