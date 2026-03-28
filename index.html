@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cinder Bank Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Fictional Demo Environment</p>
+          <h1>Cinder Bank Operations Console</h1>
+          <p class="hero-copy">
+            A mock banking dashboard for demonstrating how an agent could inspect
+            transaction history, search records, and stage a suspicious transfer
+            request.
+          </p>
+        </div>
+        <div class="hero-note">
+          <span class="status-dot"></span>
+          No live bank connection. No network transfer.
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel summary-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-label">Primary Account</p>
+              <h2>Everyday Checking</h2>
+            </div>
+            <div class="account-pill">Demo User</div>
+          </div>
+
+          <div class="summary-grid">
+            <article class="stat-card">
+              <p>Available Balance</p>
+              <strong id="availableBalance">$12,480.22</strong>
+            </article>
+            <article class="stat-card">
+              <p>Outgoing This Month</p>
+              <strong id="monthlyOutgoing">$4,982.17</strong>
+            </article>
+            <article class="stat-card">
+              <p>Incoming This Month</p>
+              <strong id="monthlyIncoming">$7,240.00</strong>
+            </article>
+          </div>
+
+          <div class="alert-card">
+            <div>
+              <p class="panel-label">Demo Threat Scenario</p>
+              <h3>Bulk transfer / data exfiltration simulation</h3>
+              <p>
+                Use the action below to simulate sending this account snapshot to
+                another bank account number. The demo only writes a local event
+                log and downloadable JSON.
+              </p>
+            </div>
+            <button class="danger-button" id="openTransferDialog">
+              Transfer Everything
+            </button>
+          </div>
+        </section>
+
+        <section class="panel search-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-label">Agent Search</p>
+              <h2>Transaction Search</h2>
+            </div>
+            <div class="result-count" id="resultCount">12 results</div>
+          </div>
+
+          <form class="search-bar" id="searchForm">
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Search merchant, note, category, amount, or date"
+              autocomplete="off"
+            />
+            <select id="typeFilter" aria-label="Transaction type filter">
+              <option value="all">All types</option>
+              <option value="credit">Credits</option>
+              <option value="debit">Debits</option>
+            </select>
+            <button type="submit">Search</button>
+          </form>
+
+          <div class="search-chips">
+            <button class="chip" data-query="payroll">Payroll</button>
+            <button class="chip" data-query="rent">Rent</button>
+            <button class="chip" data-query="wire">Wire</button>
+            <button class="chip" data-query="coffee">Coffee</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="transactionRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel side-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-label">Agent Console</p>
+              <h2>Activity Log</h2>
+            </div>
+          </div>
+
+          <ol class="activity-log" id="activityLog"></ol>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="transfer-dialog" id="transferDialog">
+      <form method="dialog" class="dialog-card" id="transferForm">
+        <div class="dialog-head">
+          <div>
+            <p class="panel-label">Suspicious Action Simulation</p>
+            <h2>Transfer Everything</h2>
+          </div>
+          <button class="ghost-button" value="cancel" aria-label="Close">
+            Close
+          </button>
+        </div>
+
+        <label for="targetAccount">Destination account number</label>
+        <input
+          id="targetAccount"
+          name="targetAccount"
+          type="text"
+          placeholder="NL91DEMO0123456789"
+          required
+        />
+
+        <label for="transferReason">Internal note</label>
+        <textarea
+          id="transferReason"
+          name="transferReason"
+          rows="3"
+          placeholder="Demo: simulate malicious data siphon"
+        ></textarea>
+
+        <p class="dialog-disclaimer">
+          This action only generates a downloadable JSON payload and updates the
+          on-screen demo log.
+        </p>
+
+        <div class="dialog-actions">
+          <button class="ghost-button" value="cancel">Cancel</button>
+          <button class="danger-button" type="submit">Run Simulation</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="activityItemTemplate">
+      <li class="activity-item">
+        <span class="activity-time"></span>
+        <div>
+          <strong class="activity-title"></strong>
+          <p class="activity-body"></p>
+        </div>
+      </li>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
