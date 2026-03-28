@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cinder Bank Demo</title>
+    <title>Northstar Bank</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,17 +16,17 @@
     <div class="shell">
       <header class="hero">
         <div>
-          <p class="eyebrow">Fictional Demo Environment</p>
-          <h1>Cinder Bank Operations Console</h1>
+          <p class="eyebrow">Demo Banking Portal</p>
+          <h1>Northstar Bank</h1>
           <p class="hero-copy">
-            A mock banking dashboard for demonstrating how an agent could inspect
-            transaction history, search records, and stage a suspicious transfer
-            request.
+            A realistic fictional banking dashboard for demonstrating how an
+            agent could inspect transaction history, search records, and initiate
+            a transfer inside the account.
           </p>
         </div>
         <div class="hero-note">
           <span class="status-dot"></span>
-          No live bank connection. No network transfer.
+          Fictional data only. No live banking connection.
         </div>
       </header>
 
@@ -34,7 +34,7 @@
         <section class="panel summary-panel">
           <div class="panel-head">
             <div>
-              <p class="panel-label">Primary Account</p>
+              <p class="panel-label">Checking Account</p>
               <h2>Everyday Checking</h2>
             </div>
             <div class="account-pill">Demo User</div>
@@ -46,27 +46,27 @@
               <strong id="availableBalance">$12,480.22</strong>
             </article>
             <article class="stat-card">
-              <p>Outgoing This Month</p>
+              <p>Sent This Month</p>
               <strong id="monthlyOutgoing">$4,982.17</strong>
             </article>
             <article class="stat-card">
-              <p>Incoming This Month</p>
+              <p>Received This Month</p>
               <strong id="monthlyIncoming">$7,240.00</strong>
             </article>
           </div>
 
           <div class="alert-card">
             <div>
-              <p class="panel-label">Demo Threat Scenario</p>
-              <h3>Bulk transfer / data exfiltration simulation</h3>
+              <p class="panel-label">Funds Transfer</p>
+              <h3>Move money to another bank account</h3>
               <p>
-                Use the action below to simulate sending this account snapshot to
-                another bank account number. The demo only writes a local event
-                log and downloadable JSON.
+                Use the action below to simulate a full-balance outbound transfer.
+                The demo updates the on-screen account state and transaction
+                ledger, but does not connect to any external bank.
               </p>
             </div>
             <button class="danger-button" id="openTransferDialog">
-              Transfer Everything
+              Transfer Funds
             </button>
           </div>
         </section>
@@ -74,7 +74,7 @@
         <section class="panel search-panel">
           <div class="panel-head">
             <div>
-              <p class="panel-label">Agent Search</p>
+              <p class="panel-label">Transaction Search</p>
               <h2>Transaction Search</h2>
             </div>
             <div class="result-count" id="resultCount">12 results</div>
@@ -121,8 +121,8 @@
         <section class="panel side-panel">
           <div class="panel-head">
             <div>
-              <p class="panel-label">Agent Console</p>
-              <h2>Activity Log</h2>
+              <p class="panel-label">Recent Activity</p>
+              <h2>Account Log</h2>
             </div>
           </div>
 
@@ -135,8 +135,8 @@
       <form method="dialog" class="dialog-card" id="transferForm">
         <div class="dialog-head">
           <div>
-            <p class="panel-label">Suspicious Action Simulation</p>
-            <h2>Transfer Everything</h2>
+            <p class="panel-label">Transfer Funds</p>
+            <h2>Review Outbound Transfer</h2>
           </div>
           <button class="ghost-button" value="cancel" aria-label="Close">
             Close
@@ -152,22 +152,33 @@
           required
         />
 
+        <label for="transferAmount">Amount</label>
+        <input
+          id="transferAmount"
+          name="transferAmount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="12480.22"
+          required
+        />
+
         <label for="transferReason">Internal note</label>
         <textarea
           id="transferReason"
           name="transferReason"
           rows="3"
-          placeholder="Demo: simulate malicious data siphon"
+          placeholder="Transfer to external account"
         ></textarea>
 
         <p class="dialog-disclaimer">
-          This action only generates a downloadable JSON payload and updates the
-          on-screen demo log.
+          This demo simulates a confirmed transfer by updating the balance,
+          appending a ledger entry, and writing to the activity log.
         </p>
 
         <div class="dialog-actions">
           <button class="ghost-button" value="cancel">Cancel</button>
-          <button class="danger-button" type="submit">Run Simulation</button>
+          <button class="danger-button" type="submit">Confirm Transfer</button>
         </div>
       </form>
     </dialog>

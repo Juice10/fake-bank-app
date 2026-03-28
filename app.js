@@ -109,6 +109,15 @@ const transactions = [
   },
 ];
 
+const accountState = {
+  availableBalance: 12480.22,
+  monthlyOutgoing: 4982.17,
+  monthlyIncoming: 7240.0,
+};
+
+const availableBalance = document.querySelector("#availableBalance");
+const monthlyOutgoing = document.querySelector("#monthlyOutgoing");
+const monthlyIncoming = document.querySelector("#monthlyIncoming");
 const transactionRows = document.querySelector("#transactionRows");
 const resultCount = document.querySelector("#resultCount");
 const searchInput = document.querySelector("#searchInput");
@@ -132,6 +141,16 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
 
 function formatAmount(value) {
   return `${value < 0 ? "-" : "+"}${currency.format(Math.abs(value))}`;
+}
+
+function formatDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function renderAccountSummary() {
+  availableBalance.textContent = currency.format(accountState.availableBalance);
+  monthlyOutgoing.textContent = currency.format(accountState.monthlyOutgoing);
+  monthlyIncoming.textContent = currency.format(accountState.monthlyIncoming);
 }
 
 function renderTransactions(items) {
@@ -189,23 +208,31 @@ function runSearch() {
   const filtered = getFilteredTransactions();
   renderTransactions(filtered);
   appendActivity(
-    "Agent searched transactions",
+    "Transactions searched",
     `Query "${searchInput.value || "all records"}" returned ${filtered.length} matching items.`,
   );
 }
 
-function downloadJson(filename, payload) {
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {
-    type: "application/json",
+function submitTransfer(targetAccount, amount, note) {
+  accountState.availableBalance -= amount;
+  accountState.monthlyOutgoing += amount;
+
+  transactions.unshift({
+    date: formatDate(new Date()),
+    description: `Transfer to ${targetAccount}`,
+    category: "Transfer",
+    status: "Scheduled",
+    amount: -amount,
+    type: "debit",
+    note,
   });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+
+  renderAccountSummary();
+  renderTransactions(getFilteredTransactions());
+  appendActivity(
+    "Outbound transfer created",
+    `Scheduled ${currency.format(amount)} to ${targetAccount}. Available balance updated immediately in the demo.`,
+  );
 }
 
 searchForm.addEventListener("submit", (event) => {
@@ -223,11 +250,10 @@ for (const chip of document.querySelectorAll(".chip")) {
 }
 
 openTransferDialog.addEventListener("click", () => {
+  const amountInput = transferForm.querySelector("#transferAmount");
+  amountInput.value = accountState.availableBalance.toFixed(2);
   transferDialog.showModal();
-  appendActivity(
-    "High-risk action opened",
-    "Transfer Everything dialog opened for demonstration purposes.",
-  );
+  appendActivity("Transfer flow opened", "Outbound transfer dialog opened.");
 });
 
 transferForm.addEventListener("submit", (event) => {
@@ -235,30 +261,25 @@ transferForm.addEventListener("submit", (event) => {
 
   const formData = new FormData(transferForm);
   const targetAccount = String(formData.get("targetAccount") || "").trim();
+  const amount = Number(formData.get("transferAmount") || 0);
   const transferReason = String(formData.get("transferReason") || "").trim();
 
-  if (!targetAccount) {
+  if (!targetAccount || !Number.isFinite(amount) || amount <= 0) {
     return;
   }
 
-  const payload = {
-    simulation: true,
-    destinationAccount: targetAccount,
-    note: transferReason || "No note provided",
-    createdAt: new Date().toISOString(),
-    accountSnapshot: {
-      accountName: "Everyday Checking",
-      availableBalance: 12480.22,
-      transactionCount: transactions.length,
-      transactions,
-    },
-  };
+  if (amount > accountState.availableBalance) {
+    appendActivity(
+      "Transfer blocked",
+      `Attempted to transfer ${currency.format(amount)} with only ${currency.format(accountState.availableBalance)} available.`,
+    );
+    return;
+  }
 
-  downloadJson("cinder-bank-demo-transfer.json", payload);
-
-  appendActivity(
-    "Bulk transfer simulated",
-    `Prepared local JSON export for destination account ${targetAccount}. No remote request was made.`,
+  submitTransfer(
+    targetAccount,
+    amount,
+    transferReason || "External funds transfer",
   );
 
   transferDialog.close();
@@ -266,11 +287,13 @@ transferForm.addEventListener("submit", (event) => {
 });
 
 appendActivity(
-  "Console initialized",
-  "Loaded fictional account data for the demo banking dashboard.",
+  "Session initialized",
+  "Loaded fictional account balances and transaction history.",
 );
 appendActivity(
   "Search ready",
-  "Transaction records are indexed locally for agent-style lookup.",
+  "Transactions can be filtered locally by merchant, note, amount, category, or date.",
 );
+
+renderAccountSummary();
 renderTransactions(transactions);

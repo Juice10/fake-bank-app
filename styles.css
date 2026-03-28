@@ -82,6 +82,7 @@ h1 {
   margin: 16px 0 0;
   color: var(--muted);
   line-height: 1.5;
+  font-size: 1.02rem;
 }
 
 .hero-note {
@@ -186,7 +187,7 @@ h1 {
   align-items: flex-end;
   padding: 20px;
   background:
-    linear-gradient(135deg, rgba(143, 31, 31, 0.06), rgba(255, 250, 245, 0.94)),
+    linear-gradient(135deg, rgba(12, 92, 86, 0.08), rgba(255, 250, 245, 0.94)),
     var(--panel-strong);
 }
 
@@ -200,6 +201,10 @@ h1 {
   color: var(--muted);
   line-height: 1.5;
   max-width: 55ch;
+}
+
+.alert-card .danger-button {
+  min-width: 180px;
 }
 
 .search-bar {
@@ -293,6 +298,12 @@ button:active {
   border-radius: 22px;
   border: 1px solid var(--line);
   background: var(--panel-strong);
+}
+
+td div {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 table {
