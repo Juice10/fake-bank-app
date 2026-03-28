@@ -27,6 +27,15 @@ const transactions = [
     note: "Latte and croissant",
   },
   {
+    date: "2026-03-25",
+    description: "Tikkie from Frank",
+    category: "Transfer",
+    status: "Settled",
+    amount: -42.0,
+    type: "debit",
+    note: "Split the self-hosted LAN party pizza bill",
+  },
+  {
     date: "2026-03-24",
     description: "Helios Insurance",
     category: "Insurance",
